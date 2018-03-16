@@ -1,0 +1,39 @@
+extends layout
+
+block content
+    .main.container
+        .row
+            .col-md-6.col-md-offset-3
+                h1.display-4.m-b-2 Restaurant Menu
+
+                // register form
+                form(method='POST' action='/register/restaurant/post')
+                    div#item-elements
+                        div.form-group
+                            label(for='item') Item:
+                            input#item.form-control(type='text', placeholder='item' name='item')
+                            label.checkbox-inline
+                            strong Allergies:
+                                each row in allergies
+                                    input(type="checkbox")
+                                    span=row.name
+                    div.form-group
+                        #plus +
+                    button.btn.btn-primary(type='submit') Sign up
+    style(type='text/css').
+        #plus {
+            float: left;
+            cursor: pointer;
+        }
+
+        button {
+            clear: both;
+            display: block;
+        }
+    script(src='/javascripts/jquery.min.js')
+    script.
+        $("#plus").click(function () {
+            console.log($(".form-group").first())
+            $(".form-group").first().clone().appendTo($("#item-elements"))
+            console.log("lkdsjf")
+        })

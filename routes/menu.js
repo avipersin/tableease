@@ -5,7 +5,9 @@ const db = require('./db');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('register');
+    getAllergies(function (rows) {
+        res.render('menu', {allergies: rows});
+    });
 });
 
 router.post('/restaurant/post', function (req, res, next) {
@@ -26,6 +28,15 @@ router.get('/restaurant/:id', function (req, res, next) {
 module.exports = router;
 
 // mysql functions related to register
+function getAllergies(callback) {
+    var query = "select * from allergies";
+    db.query(query, function (err, rows, fields) {
+        if (err) throw err;
+        return callback(rows);
+    });
+}
+
+
 function addRestaurant(formFields, callback) {
     var name = formFields.name;
     var address = formFields.address;

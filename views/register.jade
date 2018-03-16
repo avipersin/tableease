@@ -4,13 +4,16 @@ block content
     .main.container
         .row
             .col-md-6.col-md-offset-3
-                h1.display-4.m-b-2 Sign Up
+                h1.display-4.m-b-2 Restaurant Sign Up
 
                 // register form
-                form(method='POST' action='/register/company/post')
+                form(method='POST' action='/register/restaurant/post')
                     div.form-group
                         label(for='name') Name:
-                        input#name.form-control(type='text', placeholder='company name' name='name')
+                        input#name.form-control(type='text', placeholder='name' name='name')
+                    div.form-group
+                        label(for='address') Address:
+                        input#address.form-control(type='text', placeholder='address' name='address')
                     div.form-group
                         label(for='email') Email:
                         input#email.form-control(type='email', placeholder='name@email.com' name='email')
