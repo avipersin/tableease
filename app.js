@@ -4,7 +4,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
+const server = require('http').createServer(app);
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -49,5 +49,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+server.listen(3000);
