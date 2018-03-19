@@ -4,7 +4,6 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const server = require('http').createServer(app);
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -12,6 +11,7 @@ const register = require('./routes/register');
 const menu = require('./routes/menu');
 
 const app = express();
+const server = require('http').createServer(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

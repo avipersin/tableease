@@ -3,3 +3,9 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  input(type="text", id="address-input")
+  script(src="/javascripts/places.js")
+  script
+    | var placesAutocomplete = places({
+    |   container: document.querySelector('#address-input')
+    | });
