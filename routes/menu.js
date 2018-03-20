@@ -1,18 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-
+const isLoggedIn = require("./myFunctions")
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', isLoggedIn, function (req, res, next) {
     getAllergies(function (rows) {
         res.render('menu', {allergies: rows});
     });
 });
 
 router.post('/post', function (req, res, next) {
-    var formFields = req.body;
-    addFood(formFields, function () {
+
+    addFood(req, function (formFields) {
         res.render('action', {data: 'Added' + JSON.stringify(formFields)});
     });
 
@@ -37,8 +37,9 @@ function getAllergies(callback) {
     });
 }
 
-function addFood(formFields, callback) {
-    var company_id = 3;
+function addFood(req, callback) {
+    var formFields = req.body;
+    var company_id = req.user.id;
     var name = formFields.name;
     var rowId = 0;
     var description = formFields.description;
@@ -61,7 +62,7 @@ function addFoodAllergy(rowId, formFields, callback) {
             })
         }
     }
-    return callback;
+    return formFields;
 
 }
 

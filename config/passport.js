@@ -95,8 +95,6 @@ module.exports = function (passport) {
                     if (!rows.length) {
                         return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                     }
-                    console.log(bcrypt.hashSync(password, null, null))
-                    console.log(rows[0].password)
                     // if the user is found but the password is wrong
                     if (!bcrypt.compareSync(password, rows[0].password))
                         return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata

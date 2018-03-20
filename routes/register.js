@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+var bcrypt = require('bcrypt-nodejs');
 
 module.exports = function (passport) {
     /* GET home page. */
@@ -16,6 +17,23 @@ module.exports = function (passport) {
     }));
     return router;
 };
+
+router.post('/restaurant/edit', function (req, res, next) {
+    var newUserMysql = {
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, null, null),  // use the generateHash function in our user model
+        phoneNumber: req.body.phoneNumber,
+        address: req.body.address,
+        name: req.body.name
+    };
+
+    var insertQuery = "Update companies set email='" + newUserMysql.email + "', password='" + newUserMysql.password +
+        "', address='" + newUserMysql.address + "', phone_number='" + newUserMysql.phoneNumber + "', name='" + newUserMysql.name +
+        "' where id=" + req.user.id;
+    db.query(insertQuery);
+    res.render("profile", {user: req.user, message: req.flash('signupMessage')});
+
+});
 
 router.get('/restaurant/:id', function (req, res, next) {
     var id = req.params.id;

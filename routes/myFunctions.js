@@ -1,13 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
-
-router.get('/', isLoggedIn, function (req, res) {
-    res.render('profile', {user: req.user, message: req.flash('signupMessage')});
-});
-module.exports = router;
-
-function isLoggedIn(req, res, next) {
+const isLoggedIn = function(req, res, next) {
 
     // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
@@ -15,4 +8,8 @@ function isLoggedIn(req, res, next) {
 
     // if they aren't redirect them to the home page
     res.redirect('/');
-}
+};
+
+module.exports = isLoggedIn;
+
+
