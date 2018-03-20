@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./db');
+const db = require('../config/db');
 
 
 /* GET home page. */
@@ -10,18 +10,19 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.post('/restaurant/post', function (req, res, next) {
+router.post('/post', function (req, res, next) {
     var formFields = req.body;
-    addRestaurant(formFields, function () {
+    addFood(formFields, function () {
         res.render('action', {data: 'Added' + JSON.stringify(formFields)});
     });
 
 });
 
-router.get('/restaurant/:id', function (req, res, next) {
+
+router.get('/:id', function (req, res, next) {
     var id = req.params.id;
-    getRestaurant(id, function (rows) {
-        res.render('action', {data: JSON.stringify(rows[0])});
+    getAllergiesFood(id, function (rows) {
+        res.render('action', {data: JSON.stringify(rows)});
     });
 });
 
@@ -36,23 +37,36 @@ function getAllergies(callback) {
     });
 }
 
-
-function addRestaurant(formFields, callback) {
+function addFood(formFields, callback) {
+    var company_id = 3;
     var name = formFields.name;
-    var address = formFields.address;
-    var email = formFields.email;
-    var phoneNumber = formFields.phoneNumber;
-    var password = formFields.password;
-    var confirmPassword = formFields.confirmPassword;
-    var query = "insert into companies (name, address, phone_number, email, password) values ('" + name + "' , '" + address + "' , '" + phoneNumber + "' , '" + email + "', '" + password + "')";
-    db.query(query, function (err, rows, fields) {
+    var rowId = 0;
+    var description = formFields.description;
+    var foodInsertQuery = "insert into food (name, company_id, description) values ('" + name + "' , '" + company_id + "' , '" + description + "')";
+    db.query(foodInsertQuery, function (err, rows, fields) {
         if (err) throw err;
-        return callback();
+        rowId = rows.insertId;
+        return callback(addFoodAllergy(rowId, formFields));
     });
+
+
 }
 
-function getRestaurant(id, callback) {
-    var query = "select * from companies where id =" + id;
+function addFoodAllergy(rowId, formFields, callback) {
+    for (var key in formFields) {
+        if (key !== "name" && key !== "description") {
+            var foodAllergyInsertQuery = "insert into food_allergy (food_id, allergy_id) values ('" + rowId + "' , '" + formFields[key] + "')";
+            db.query(foodAllergyInsertQuery, function (err, rows, fields) {
+                if (err) throw err;
+            })
+        }
+    }
+    return callback;
+
+}
+
+function getAllergiesFood(id, callback) {
+    var query = "select * from food_allergy where food_id =" + id;
     db.query(query, function (err, rows, fields) {
         if (err) throw err;
         return callback(rows);

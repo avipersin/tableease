@@ -1,5 +1,10 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    p Welcome to #{title}
+    p Login or Register with:
+    p
+        a(href="/login") Login
+    p
+        a(href="/register") Register

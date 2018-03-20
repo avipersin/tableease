@@ -1,44 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./db');
+const db = require('../config/db');
 
-
-/* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('register');
-});
-
-router.post('/restaurant/post', function (req, res, next) {
-    var formFields = req.body;
-    addRestaurant(formFields, function () {
-        res.render('action', {data: 'Added' + JSON.stringify(formFields)});
+module.exports = function (passport) {
+    /* GET home page. */
+    router.get('/', function (req, res, next) {
+        res.render('register', {message: req.flash('signupMessage')});
     });
 
-});
+// process the signup form
+    router.post('/restaurant', passport.authenticate('local-signup', {
+        successRedirect: '/profile', // redirect to the secure profile section
+        failureRedirect: '/register', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
+    }));
+    return router;
+};
 
 router.get('/restaurant/:id', function (req, res, next) {
     var id = req.params.id;
     getRestaurant(id, function (rows) {
-        res.render('action', {data: JSON.stringify(rows[0])});
+        res.render('action', {data: JSON.stringify(rows)});
     });
 });
-
-module.exports = router;
-
-// mysql functions related to register
-function addRestaurant(formFields, callback) {
-    var name = formFields.name;
-    var address = formFields.address;
-    var email = formFields.email;
-    var phoneNumber = formFields.phoneNumber;
-    var password = formFields.password;
-    var confirmPassword = formFields.confirmPassword;
-    var query = "insert into companies (name, address, phone_number, email, password) values ('" + name + "' , '" + address + "' , '" + phoneNumber + "' , '" + email + "', '" + password + "')";
-    db.query(query, function (err, rows, fields) {
-        if (err) throw err;
-        return callback();
-    });
-}
 
 function getRestaurant(id, callback) {
     var query = "select * from companies where id =" + id;
@@ -47,5 +31,3 @@ function getRestaurant(id, callback) {
         return callback(rows);
     });
 }
-
-// random functions for the register page
