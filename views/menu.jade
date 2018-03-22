@@ -2,9 +2,11 @@ extends layout
 
 block content
     .main.container
+        if (message.length)
+            .alert.alert-danger #{message}
         .row
             .col-md-6.col-md-offset-3
-                h1.display-4.m-b-2 Restaurant Item
+                h1.display-4.m-b-2 Add Item
 
                 // register form
                 form(method='POST' action='/menu/post')
