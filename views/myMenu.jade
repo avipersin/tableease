@@ -1,0 +1,32 @@
+extends layout
+
+block content
+    .main.container
+        .row
+            .col-md-6.col-md-offset-3
+                h1.display-4.m-b-2 My Menu
+
+                // register form
+                form(method='POST' action='/menu/post')
+                    table
+                        thead
+                            tr: th Name
+                                th Description
+                                th Allergies
+                        tbody
+                            each food in data
+                                tr
+                                    td
+                                        a(href="/menu/#{food.id}") #{food.name}
+                                    td #{food.description}
+                                    each allergy in food.allergyNames
+                                        td #{allergy}
+                        button.btn.btn-primary(type='submit') Add
+                        p
+                            a(href="/profile")
+                                button(type="button") Profile
+    style(type='text/css').
+        button {
+            clear: both;
+            display: block;
+        }

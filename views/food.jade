@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    .main.container
+        .row
+            .col-md-6.col-md-offset-3
+                h1.display-4.m-b-2 My Menu
+
+                form(method='POST' action='/menu/update/#{data.id}')
+
+                    div.form-group
+                        label Name:
+                        input.form-control(type='text', name='name', value="#{data.name}")
+                        label Description:
+                        textarea(name='description') #{data.description}
+                        label.checkbox-inline
+                        strong Allergies:
+                        each row in allergies
+                            - var checked = false
+                            if(data.allergyIds.indexOf(row.id) !== -1)
+                                - checked = true;
+                            input(type="checkbox", name=row.name, value=row.id, checked=checked)
+                            span=row.name
+                    button.btn.btn-primary(type='submit') Update
+                    p
+                        a(href="/menu/delete/#{data.id}")
+                            button(type="button") Delete

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-const myFunctions = require("./myFunctions")
-var sleep = require('system-sleep');
+const myFunctions = require("./myFunctions");
+const async = require("async");
 
 
 /* GET home page. */
@@ -12,44 +12,119 @@ router.get('/', myFunctions.isLoggedIn, function (req, res, next) {
     });
 });
 
-router.get('/edit', function (req, res, next) {
-    var companyId = 31;
-    getMenu(companyId, function (rows) {
-        // rows.forEach(function (row) {
-        //     var foodId = row.id;
-        //     var allergyList = [];
-        //     getAllergiesFood(foodId, function (allergies) {
-        //         allergies.forEach(function (allergy) {
-        //             allergyList.push(allergy.allergy_id);
-        //
-        //         });
-        //         ret.allergies = allergyList;
-        //     });
-        // });
-        console.log(rows)
-        res.render('action', {data: JSON.stringify(rows)});
 
-    });
+router.get('/edit', myFunctions.isLoggedIn, function (req, res, next) {
+    var companyId = req.user.id;
+    async.waterfall([
+        async.apply(getMenuIds, companyId),
+        async.apply(getAllergiesMenu, companyId),
+        function (jsonReturn) {
+            res.render('myMenu', {data: jsonReturn})
+        }])
 });
 
-router.post('/post', function (req, res, next) {
-    addFood(req, function (formFields) {
-        req.flash('menuMessage', "Added: " + JSON.stringify(formFields))
+router.post('/post', myFunctions.isLoggedIn, function (req, res, next) {
+    var companyId = req.user.id;
+    addFood(req, companyId, function (formFields) {
+        req.flash('menuMessage', "Added: " + JSON.stringify(formFields));
         res.redirect('/menu');
     });
 
 });
 
-router.get('/:id', function (req, res, next) {
-    var id = req.params.id;
-    getAllergiesFood(id, function (rows) {
-        res.render('action', {data: JSON.stringify(rows)});
-    });
+router.get('/delete/:id', myFunctions.isLoggedIn, function (req, res, next) {
+    var companyId = req.user.id;
+    var foodId = req.params.id;
+    checkOwnerFood(foodId, companyId, function (row) {
+        if (!row) {
+            res.render("action", {data: "You do not own that menu item OR it does not exist."});
+        }
+        else {
+            deleteFoodAllergies(foodId, companyId, function (result) {
+                res.redirect("/menu/edit");
+            })
+        }
+
+    })
+});
+
+router.post('/update/:id', myFunctions.isLoggedIn, function (req, res, next) {
+    var foodId = req.params.id;
+    var companyId = req.user.id;
+    checkOwnerFood(foodId, companyId, function (row) {
+        if (!row) {
+            res.render("action", {data: "You do not own that menu item OR it does not exist."});
+        }
+        else {
+            deleteFoodAllergies(foodId, companyId, function (result) {
+                addFood(req, function (formFields) {
+                    res.redirect("/menu/edit");
+                })
+            })
+        }
+    })
+});
+
+
+router.get('/:id', myFunctions.isLoggedIn, function (req, res, next) {
+    var companyId = req.user.id;
+    var foodId = req.params.id;
+    async.waterfall([
+        async.apply(getMenuItem, companyId, foodId),
+        getAllergiesFood,
+        function (row) {
+            getAllergies(function (allergies) {
+                res.render('food', {allergies: allergies, data: row})
+            })
+        }
+    ])
 });
 
 module.exports = router;
 
 // mysql functions related to register
+
+
+function getAllergiesMenu(companyId, rows, callback) {
+    var jsonReturn = [];
+    async.each(rows, function (row, callback1) {
+        getMenuItem(companyId, row.id, function (err, row) {
+            getAllergiesFood(row, function (err, allergyRow) {
+                jsonReturn.push(allergyRow);
+                callback1();
+            });
+        })
+
+    }, function (err) {
+        callback(err, jsonReturn)
+    })
+}
+
+function setAllergyList(allergies, row, callback) {
+    var allergyList = [];
+    var allergyIds = [];
+    async.each(allergies, function (allergy, callback1) {
+        convertIdAllergy(allergy.allergy_id, function (name) {
+            allergyList.push(name);
+            allergyIds.push(allergy.allergy_id);
+            callback1();
+        })
+    }, function (err) {
+        row.allergyNames = allergyList;
+        row.allergyIds = allergyIds;
+        callback();
+    });
+}
+
+function getAllergiesFood(row, callback) {
+    var foodId = row.id;
+    getAllergiesForFood(foodId, function (allergies) {
+        setAllergyList(allergies, row, function () {
+            callback(null, row)
+        })
+    })
+}
+
 function getAllergies(callback) {
     var query = "select * from allergies";
     db.query(query, function (err, rows, fields) {
@@ -58,16 +133,14 @@ function getAllergies(callback) {
     });
 }
 
-function addFood(req, callback) {
+function addFood(req, companyId, callback) {
     var formFields = req.body;
-    var company_id = req.user.id;
     var name = formFields.name;
-    var rowId = 0;
     var description = formFields.description;
-    var foodInsertQuery = "insert into food (name, company_id, description) values ('" + name + "' , '" + company_id + "' , '" + description + "')";
+    var foodInsertQuery = "insert into food (name, company_id, description) values ('" + name + "' , '" + companyId + "' , '" + description + "')";
     db.query(foodInsertQuery, function (err, rows, fields) {
         if (err) throw err;
-        rowId = rows.insertId;
+        var rowId = rows.insertId;
         return callback(addFoodAllergy(rowId, formFields));
     });
 
@@ -87,47 +160,61 @@ function addFoodAllergy(rowId, formFields, callback) {
 
 }
 
-function getAllergiesFood(foodId, row, callback) {
-    var allergyList = [];
-    var query = "select * from food_allergy where food_id =" + foodId;
-    db.query(query, function (err, allergies, fields) {
-        if (err) throw err;
-        allergies.forEach(function (allergy) {
-            allergyList.push(allergy.allergy_id);
-        });
-        row.allergies = allergyList;
-        return callback(row)
-    });
-}
-
-function getMenu(companyId, callback) {
-    var query = "select * from food where company_id =" + companyId;
+function getMenuIds(companyId, callback) {
+    var query = "select id from food where company_id =" + companyId;
     db.query(query, function (err, rows, fields) {
         if (err) throw err;
-        return getAllAllergies(rows, callback);
+        callback(null, rows)
     })
 }
 
-function getAllAllergies(rows, callback) {
-
-
-
-
-
-
-    rows.forEach(function (row) {
-        var foodId = row.id;
-        return getAllergiesFood(foodId, row, callback);
-    });
+function getMenuItem(companyId, foodId, callback) {
+    var query = "select * from food where company_id =" + companyId + " and id=" + foodId;
+    db.query(query, function (err, row, fields) {
+        if (err) throw err;
+        callback(null, row[0])
+    })
 }
 
-function combineFoodAllergy(allergies, row, callback) {
-    var allergyList = [];
-    allergies.forEach(function (allergy) {
-        allergyList.push(allergy.allergy_id);
-    });
-    row.allergies = allergyList;
-    return 1;
+function getAllergiesForFood(foodId, callback) {
+    var query = "select * from food_allergy where food_id =" + foodId;
+    db.query(query, function (err, allergies, fields) {
+        if (err) throw err;
+        return callback(allergies);
+    })
 }
+
+function convertIdAllergy(allergyId, callback) {
+    var query = "select name from allergies where id =" + allergyId;
+    db.query(query, function (err, name, fields) {
+        if (err) throw err;
+        return callback(name[0].name);
+    })
+}
+
+function deleteFood(foodId, companyId) {
+    var query = "delete from food where id =" + foodId + " and company_id=" + companyId;
+    db.query(query, function (err, res, fields) {
+        if (err) throw err;
+        return res;
+    })
+}
+
+function deleteFoodAllergies(foodId, companyId, callback) {
+    var query = "delete from food_allergy where food_id =" + foodId;
+    db.query(query, function (err, name, fields) {
+        if (err) throw err;
+        return callback(deleteFood(foodId, companyId));
+    })
+}
+
+function checkOwnerFood(foodId, companyId, callback) {
+    var query = "SELECT * FROM food WHERE company_id =" + companyId + " and id =" + foodId;
+    db.query(query, function (err, row, fields) {
+        if (err) throw err;
+        return callback(row[0]);
+    })
+}
+
 
 // random functions for the register page

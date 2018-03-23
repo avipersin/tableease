@@ -6,9 +6,8 @@ block content
             .alert.alert-danger #{message}
         .row
             .col-md-6.col-md-offset-3
-                h1.display-4.m-b-2 Add Item
+                h1.display-4.m-b-2 Add Food
 
-                // register form
                 form(method='POST' action='/menu/post')
 
                     div.form-group
@@ -22,12 +21,10 @@ block content
                                 input(type="checkbox", name=row.name, value=row.id)
                                 span=row.name
                     button.btn.btn-primary(type='submit') Add
+                    p
+                        a(href="/profile")
+                            button(type="button") Profile
     style(type='text/css').
-        #plus {
-            float: left;
-            cursor: pointer;
-        }
-
         button {
             clear: both;
             display: block;
