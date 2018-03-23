@@ -77,7 +77,9 @@ router.get('/:id', myFunctions.isLoggedIn, function (req, res, next) {
                 res.render('food', {allergies: allergies, data: row})
             })
         }
-    ])
+    ], function (err, row) {
+        res.render("action", {data: err});
+    })
 });
 
 module.exports = router;
@@ -117,12 +119,18 @@ function setAllergyList(allergies, row, callback) {
 }
 
 function getAllergiesFood(row, callback) {
-    var foodId = row.id;
-    getAllergiesForFood(foodId, function (allergies) {
-        setAllergyList(allergies, row, function () {
-            callback(null, row)
+    if (!row) {
+        callback("You do not own that menu item OR it does not exist.", null);
+        return 0;
+    }
+    else {
+        var foodId = row.id;
+        getAllergiesForFood(foodId, function (allergies) {
+            setAllergyList(allergies, row, function () {
+                callback(null, row)
+            })
         })
-    })
+    }
 }
 
 function getAllergies(callback) {
