@@ -50,6 +50,7 @@ const profile = require('./routes/profile');
 const menu = require('./routes/menu');
 const logout = require('./routes/logout');
 
+
 app.use('/', index);
 app.use('/register', register);
 app.use('/login', login);

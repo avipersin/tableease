@@ -2,40 +2,41 @@ extends layout
 
 
 block content
-    .main.container
-        if (message.length)
-            .alert.alert-danger #{message}
-        .row
-            .col-md-6.col-md-offset-3
-                h1.display-4.m-b-2 My Profile
-                p
-                    a(href="/menu") Create Menu
-                p
-                    a(href="/menu/edit") Edit Menu
+    div.bgempty
+        div.container.h-100
+            div.row.h-100.justify-content-center.align-items-center
+                div.col-md-6
+                    div
+                        span.h1.inline My Profile
+                        a.btn.btn-info.btn-lg(href="/menu" role="button") Add Item
+                        a.btn.btn-info.btn-lg.btn-inverse(href="/menu/edit" role="button") Edit Menu
+                        if (message.length)
+                            .alert.alert-danger #{message}
 
-                // register form
-                form(method='POST' action='/register/restaurant/edit')
-                    div.form-group
-                        label(for='name') Name:
-                        input#name.form-control(type='text', placeholder='name' name='name', value="#{user.name}")
-                    div.form-group
-                        label(for='address') Address:
-                        input#address.form-control(type='text', placeholder='address' name='address', value="#{user.address}")
-                    div.form-group
-                        label(for='email') Email:
-                        input#email.form-control(type='email', placeholder='name@email.com' name='email', value="#{user.email}")
-                    div.form-group
-                        label(for='phoneNumber') Phone Number:
-                        input#phoneNumber.form-control(type='text', placeholder='000000000' name='phoneNumber', value="#{user.phone_number}")
-                    div.form-group
-                        label(for='pw') Password:
-                        input#pw.form-control(type='password' name='password')
-                    div.form-group
-                        label(for='pw2') Confirm Password:
-                        input#pw2.form-control(type='password' name='confirmPassword')
-                    button.btn.btn-primary(type='submit') Save
-                p
-                    a(href="/logout") Logout
+
+
+                    form(method='POST' action='/register/restaurant/edit')
+                        div.form-group
+                            label(for='name') Name:
+                            input#name.form-control(type='text', placeholder='name' name='name', value="#{user.name}")
+                        div.form-group
+                            label(for='address') Address:
+                            input#address.form-control(type='text', placeholder='address' name='address', value="#{user.address}")
+                        div.form-group
+                            label(for='email') Email:
+                            input#email.form-control(type='email', placeholder='name@email.com' name='email', value="#{user.email}")
+                        div.form-group
+                            label(for='phoneNumber') Phone Number:
+                            input#phoneNumber.form-control(type='text', placeholder='000000000' name='phoneNumber', value="#{user.phone_number}")
+                        div.form-group
+                            label(for='pw') Password:
+                            input#pw.form-control(type='password' name='password')
+                        div.form-group
+                            label(for='pw2') Confirm Password:
+                            input#pw2.form-control(type='password' name='confirmPassword')
+                        button.btn.btn-primary(type='submit') Save
+                        a.btn.btn-primary(href="/logout" role="button") Logout
+
     script(src="/javascripts/places.js@1.6.0")
     script.
         var placesAutocomplete = places({

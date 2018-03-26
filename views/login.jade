@@ -1,24 +1,24 @@
 extends layout
 
 block content
-    .main.container
-        if (message.length)
-            .alert.alert-danger #{message}
-        .row
-            .col-md-6.col-md-offset-3
-                h1.display-4.m-b-2 Restaurant Login
-                // login form
-                form(method='POST' action='/login')
-                    div.form-group
-                        label(for='email') Email:
-                        input#email.form-control(type='email', placeholder='name@email.com' name='username', value="avipersin@gmail.com")
-                    div.form-group
-                        label(for='pw') Password:
-                        input#pw.form-control(type='password' name='password', value="avipersin")
-                    div.checkbox
-                        label(for='remember')
-                            input#remember(type='checkbox' name='remember')
-                            span  Remember Me
-                    button.btn.btn-primary(type='submit') Login
+    div.bgempty
+        div.container.h-100
+            div.row.h-100.justify-content-center.align-items-center
+                div.col-md-6
+                    h1 Restaurant Login
+                    if (message.length)
+                        .alert.alert-danger #{message}
+                    form(method='POST' action='/login')
+                        div.form-group
+                            label(for='email') Email:
+                            input#email.form-control(type='email', placeholder='name@email.com' name='username', value="avipersin@gmail.com")
+                        div.form-group
+                            label(for='pw') Password:
+                            input#pw.form-control(type='password' name='password', value="avipersin")
+                        div.checkbox
+                            label(for='remember')
+                                input#remember(type='checkbox' name='remember')
+                                span  Remember Me
+                        button.btn.btn-primary(type='submit') Login
 
 

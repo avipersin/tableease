@@ -1,30 +1,28 @@
 extends layout
 
 block content
-    .main.container
-        if (message.length)
-            .alert.alert-danger #{message}
-        .row
-            .col-md-6.col-md-offset-3
-                h1.display-4.m-b-2 Add Food
-
-                form(method='POST' action='/menu/post')
-
-                    div.form-group
-                        label Name:
-                        input.form-control(type='text', name='name')
-                    div.form-group
-                        label Description:
-                        textarea(name='description')
-                    div.form-group
-                        label.checkbox-inline
-                        strong Allergies:
+    div.bgempty
+        div.container.h-100
+            div.row.h-100.justify-content-center.align-items-center
+                div.col-md-6
+                    h1 Add Food
+                        if (message.length)
+                            .alert.alert-danger #{message}
+                    form(method='POST' action='/menu/post')
+                        div.form-group
+                            label(for='name') Name:
+                            input#name.form-control(type='text', name='name')
+                        div.form-group
+                            label(for="description") Description:
+                            textarea#description(name='description')
+                        div.form-group Allergies:
                             each row in allergies
-                                input(type="checkbox", name=row.name, value=row.id)
-                                span=row.name
+                                div.form-check.form-check-inline
+                                    input.form-check-input(type="checkbox", name=row.name, value=row.id)
+                                    label.checkbox.inline.form-check-label #{row.name}
+
                     button.btn.btn-primary(type='submit') Add
-                    p
-                        a.btn.btn-primary(href="/profile" role="button") Profile
+
     style(type='text/css').
         button {
             clear: both;

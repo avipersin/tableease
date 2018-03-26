@@ -1,11 +1,11 @@
 extends layout
 
 block content
-    div.container
-        h1= title
-        p Welcome to #{title}
-        p Login or Register with:
-        p
-            a(href="/login") Login
-        p
-            a(href="/register") Register
+    div.bg
+        div.container.h-100
+            div.row.h-100.align-items-center
+                div.justify-content-left
+                    p.h1.text-success Eat the way you want.
+                    div.justify-content-center.text-center
+                        a.btn.btn-success.btn-lg(href="/login" role="button") Login
+                        a.btn.btn-success.btn-lg.btn-inverse(href="/register" role="button") Register

@@ -1,8 +1,20 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html, body {
+    height: 100%;
 }
 
-a {
-  color: #00B7FF;
+.bg {
+    background: url("../images/salad-2068220_1920.jpg") no-repeat center center fixed;
+    height: 100%;
+    padding-top: 70px;
+    /* Workaround for some mobile browsers */
+
+}
+
+.bgempty {
+    padding-top: 70px;
+}
+
+a.btn {
+    margin-left: 30px;
+    margin-bottom: 30px;
 }

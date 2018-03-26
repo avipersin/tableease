@@ -1,0 +1,15 @@
+div.navbar.navbar-expand-lg.fixed-top.navbar-dark.bg-primary
+    .container
+        a.navbar-brand(href='/') TableEase
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarColor01', aria-controls='navbarColor01', aria-expanded='false', aria-label='Toggle navigation')
+        #navbarResponsivediv.collapse.navbar-collapse
+            ul.navbar-nav.ml-auto
+                if (user)
+                    li.nav-item
+                        a.nav-link(href='/profile') Hi, #{user.name.split(" ")[0]}
+                li.nav-item
+                    a.nav-link(href='/') Features
+                li.nav-item
+                    a.nav-link(href='/') Team
+                li.nav-item
+                    a.nav-link(href='/') About

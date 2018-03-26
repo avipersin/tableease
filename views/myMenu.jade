@@ -1,30 +1,28 @@
 extends layout
 
 block content
-    .main.container
-        .row
-            .col-md-6.col-md-offset-3
-                h1.display-4.m-b-2 My Menu
+    div.bgempty
+        div.container.h-100
+            div.row.h-100.justify-content-center.align-items-center
+                div.col-md-6.inline
+                    span.h1 My Menu
+                    a.btn.btn-info.btn-lg(href="/menu" role="button") Add Item
 
-                // register form
-                form(method='POST' action='/menu/post')
-                    table
+                    table.table
                         thead
-                            tr: th Name
-                                th Description
-                                th Allergies
+                            tr
+                                th(scope="col") Name
+                                th(scope="col") Description
+                                th(scope="col") Allergies
                         tbody
                             each food in data
                                 tr
                                     td
                                         a(href="/menu/#{food.id}") #{food.name}
                                     td #{food.description}
-                                    each allergy in food.allergyNames
-                                        td #{allergy}
-                        button.btn.btn-primary(type='submit') Add
-                        p
-                            a(href="/profile")
-                                button(type="button") Profile
+                                    -var statData = JSON.stringify(food.allergyNames)
+                                    td #{statData}
+
     style(type='text/css').
         button {
             clear: both;
