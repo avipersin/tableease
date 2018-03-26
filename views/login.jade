@@ -6,7 +6,7 @@ block content
             .alert.alert-danger #{message}
         .row
             .col-md-6.col-md-offset-3
-                h1.display-4.m-b-2 Restaurant Sign Up
+                h1.display-4.m-b-2 Restaurant Login
                 // login form
                 form(method='POST' action='/login')
                     div.form-group
@@ -15,9 +15,10 @@ block content
                     div.form-group
                         label(for='pw') Password:
                         input#pw.form-control(type='password' name='password', value="avipersin")
-                    div.form-group
-                        label(for='remember') Remember Me:
-                        input#remember.form-control(type='checkbox' name='remember')
+                    div.checkbox
+                        label(for='remember')
+                            input#remember(type='checkbox' name='remember')
+                            span  Remember Me
                     button.btn.btn-primary(type='submit') Login
 
 
