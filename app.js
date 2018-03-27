@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+
 const morgan = require('morgan');
 const passport = require('passport');
 const flash = require('connect-flash');
@@ -29,11 +31,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+// app.use(session({
+//     secret: 'vidyapathaisalwaysrunning',
+//     resave: true,
+//     saveUninitialized: true
+// })); // session secret
+
+var options = {
+    host: 'localhost',
+    port: 3306,
+    user: 'session_test',
+    password: 'password',
+    database: 'session_test'
+};
+
+var sessionStore = new MySQLStore(options);
+
 app.use(session({
-    secret: 'vidyapathaisalwaysrunning',
-    resave: true,
-    saveUninitialized: true
-})); // session secret
+    key: 'session_cookie_name',
+    secret: 'session_cookie_secret',
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false
+}));
 
 
 app.use(passport.initialize());
