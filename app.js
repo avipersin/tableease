@@ -38,11 +38,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // })); // session secret
 
 var options = {
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '',
-    database: 'tableease'
+    host: 'us-cdbr-iron-east-05.cleardb.net',
+    user: 'bfdecc39479008',
+    password: 'bfdecc39479008',
+    database: 'heroku_150cb394bbf6303'
 };
 
 const sessionStore = new MySQLStore(options);
