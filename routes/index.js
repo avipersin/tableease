@@ -3,7 +3,7 @@ const router = express.Router();
 const myFuctions = require('./myFunctions')
 
 /* GET home page. */
-router.get('/', myFuctions.isLoggedIn, function (req, res, next) {
+router.get('/', function (req, res, next) {
     res.render('index', {title: 'TableEase'});
 });
 
