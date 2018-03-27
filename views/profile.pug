@@ -18,16 +18,16 @@ block content
                     form(method='POST' action='/register/restaurant/edit')
                         div.form-group
                             label(for='name') Name:
-                            input#name.form-control(type='text', placeholder='name' name='name', value="#{user.name}")
+                            input#name.form-control(type='text', placeholder='name' name='name', value=`${user.name}`)
                         div.form-group
                             label(for='address') Address:
-                            input#address.form-control(type='text', placeholder='address' name='address', value="#{user.address}")
+                            input#address.form-control(type='text', placeholder='address' name='address', value=`${user.address}`)
                         div.form-group
                             label(for='email') Email:
-                            input#email.form-control(type='email', placeholder='name@email.com' name='email', value="#{user.email}")
+                            input#email.form-control(type='email', placeholder='name@email.com' name='email', value=`${user.email}`)
                         div.form-group
                             label(for='phoneNumber') Phone Number:
-                            input#phoneNumber.form-control(type='text', placeholder='000000000' name='phoneNumber', value="#{user.phone_number}")
+                            input#phoneNumber.form-control(type='text', placeholder='000000000' name='phoneNumber', value=`${user.phone_number}`)
                         div.form-group
                             label(for='pw') Password:
                             input#pw.form-control(type='password' name='password')

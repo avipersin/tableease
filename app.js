@@ -40,12 +40,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 var options = {
     host: 'localhost',
     port: 3306,
-    user: 'session_test',
-    password: 'password',
-    database: 'session_test'
+    user: 'root',
+    password: '',
+    database: 'tableease'
 };
 
-var sessionStore = new MySQLStore(options);
+const sessionStore = new MySQLStore(options);
 
 app.use(session({
     key: 'session_cookie_name',

@@ -6,8 +6,8 @@ block content
             div.row.h-100.justify-content-center.align-items-center
                 div.col-md-6
                     h1 Add Food
-                        if (message.length)
-                            .alert.alert-danger #{message}
+                    if (message.length)
+                        .alert.alert-success #{message}
                     form(method='POST' action='/menu/post')
                         div.form-group
                             label(for='name') Name:
@@ -21,7 +21,7 @@ block content
                                     input.form-check-input(type="checkbox", name=row.name, value=row.id)
                                     label.checkbox.inline.form-check-label #{row.name}
 
-                    button.btn.btn-primary(type='submit') Add
+                        button.btn.btn-primary(type='submit') Add
 
     style(type='text/css').
         button {

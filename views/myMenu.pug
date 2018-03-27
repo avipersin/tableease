@@ -18,7 +18,7 @@ block content
                             each food in data
                                 tr
                                     td
-                                        a(href="/menu/#{food.id}") #{food.name}
+                                        a(href="/menu/" + food.id) #{food.name}
                                     td #{food.description}
                                     -var statData = JSON.stringify(food.allergyNames)
                                     td #{statData}
