@@ -20,6 +20,9 @@
     "pug": "^2.0.3",
     "serve-favicon": "^2.4.5"
   },
+  "devDependencies": {
+    "@types/express": "^4.11.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/avipersin/tableease.git"
