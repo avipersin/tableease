@@ -8,21 +8,23 @@ block content
                     h1 Restaurant Sign Up
 
                     if (message.length)
-                        .alert.alert-danger #{message}
+                        ul.alert.alert-danger
+                            each msg in message
+                                li #{msg}
 
                     form(method='POST' action='/register/restaurant/')
                         div.form-group
                             label(for='name') Name:
-                            input#name.form-control(type='text', placeholder='name' name='name')
+                            input#name.form-control(type='text', placeholder='name' name='name', value=formVals.name)
                         div.form-group
                             label(for='address') Address:
-                            input#address.form-control(type='text', placeholder='address' name='address')
+                            input#address.form-control(type='text', placeholder='address' name='address', value=formVals.address)
                         div.form-group
                             label(for='email') Email:
-                            input#email.form-control(type='email', placeholder='name@email.com' name='email')
+                            input#email.form-control(type='email', placeholder='name@email.com' name='email', value=formVals.email)
                         div.form-group
                             label(for='phoneNumber') Phone Number:
-                            input#phoneNumber.form-control(type='text', placeholder='000000000' name='phoneNumber')
+                            input#phoneNumber.form-control(type='text', placeholder='9999999999' name='phoneNumber', value=formVals.phoneNumber)
                         div.form-group
                             label(for='pw') Password:
                             input#pw.form-control(type='password' name='password')
@@ -35,5 +37,6 @@ block content
     script(src="/javascripts/places.js@1.6.0")
     script.
         var placesAutocomplete = places({
-        container: document.querySelector('#address')});
+            container: document.querySelector('#address')
+        });
 

@@ -11,9 +11,9 @@ block content
                         a.btn.btn-info.btn-lg(href="/menu" role="button") Add Item
                         a.btn.btn-info.btn-lg.btn-inverse(href="/menu/edit" role="button") Edit Menu
                         if (message.length)
-                            .alert.alert-danger #{message}
-
-
+                            ul.alert.alert-danger
+                                each msg in message
+                                    li #{msg}
 
                     form(method='POST' action='/register/restaurant/edit')
                         div.form-group

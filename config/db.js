@@ -9,7 +9,6 @@ const connection = mysql.createPool({
     database: 'heroku_150cb394bbf6303'
 });
 
-
 module.exports = connection;
 
 

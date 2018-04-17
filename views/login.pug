@@ -7,14 +7,16 @@ block content
                 div.col-md-6
                     h1 Restaurant Login
                     if (message.length)
-                        .alert.alert-danger #{message}
+                        ul.alert.alert-danger
+                            each msg in message
+                                li #{msg}
                     form(method='POST' action='/login')
                         div.form-group
                             label(for='email') Email:
-                            input#email.form-control(type='email', placeholder='name@email.com' name='username', value="")
+                            input#email.form-control(type='email', placeholder='name@email.com' name='username', value=formVals.username)
                         div.form-group
                             label(for='pw') Password:
-                            input#pw.form-control(type='password' name='password', value="")
+                            input#pw.form-control(type='password' name='password')
                         div.checkbox
                             label(for='remember')
                                 input#remember(type='checkbox' name='remember')

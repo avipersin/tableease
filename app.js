@@ -4,6 +4,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
@@ -27,17 +28,11 @@ app.use(morgan('dev')); // log every request to the console
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-// app.use(session({
-//     secret: 'vidyapathaisalwaysrunning',
-//     resave: true,
-//     saveUninitialized: true
-// })); // session secret
-
-var options = {
+const options = {
     host: 'us-cdbr-iron-east-05.cleardb.net',
     user: 'bfdecc39479008',
     password: 'd9d922b1',
@@ -68,6 +63,7 @@ const login = require('./routes/login')(passport);
 const profile = require('./routes/profile');
 const menu = require('./routes/menu');
 const logout = require('./routes/logout');
+const admin = require('./routes/admin');
 
 
 app.use('/', index);
@@ -75,10 +71,9 @@ app.use('/register', register);
 app.use('/login', login);
 app.use('/profile', profile);
 app.use('/users', users);
-
-
 app.use('/menu', menu);
 app.use('/logout', logout);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
