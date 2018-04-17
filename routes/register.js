@@ -29,8 +29,7 @@ module.exports = function (passport) {
                 }
             });
 
-        }
-    );
+        });
     return router;
 };
 
@@ -61,7 +60,6 @@ router.post('/restaurant/edit', function (req, res, next) {
             res.render("profile", {user: req.user, message: req.flash('signupMessage')});
         }
     });
-
 
 });
 
